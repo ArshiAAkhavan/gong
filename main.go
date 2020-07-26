@@ -1,36 +1,13 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"io/ioutil"
+	"gong/shell"
 	"log"
-	"os"
-	"os/exec"
-	"strings"
 )
 
 func main() {
-	stdinReader := bufio.NewReader(os.Stdin)
-
-	for {
-		fmt.Print("gong> ")
-		input, err := stdinReader.ReadString('\n')
-		panicAttack("failed to read from input", err)
-		commandline := strings.Trim(string(input), " \n")
-		args := strings.Fields(commandline)
-
-		command := exec.Command(args[0], args[1:]...)
-		outStream, _ := command.StdoutPipe()
-		errStream, _ := command.StderrPipe()
-		command.Start()
-		output, _ := ioutil.ReadAll(outStream)
-		errput, _ := ioutil.ReadAll(errStream)
-
-		command.Wait()
-		log.Println(string(errput))
-		fmt.Println(string(output))
-	}
+	shell := shell.New()
+	shell.Start()
 }
 
 func panicAttack(message string, err error) {
