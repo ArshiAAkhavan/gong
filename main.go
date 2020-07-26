@@ -14,16 +14,17 @@ func main() {
 	stdinReader := bufio.NewReader(os.Stdin)
 
 	for {
-		fmt.Print("$> ")
+		fmt.Print("gong> ")
 		input, err := stdinReader.ReadString('\n')
 		panicAttack("failed to read from input", err)
 		commandline := strings.Trim(string(input), " \n")
 		args := strings.Fields(commandline)
+
 		command := exec.Command(args[0], args[1:]...)
-		outStream, err := command.StdoutPipe()
-		errStream, err := command.StderrPipe()
+		outStream, _ := command.StdoutPipe()
+		errStream, _ := command.StderrPipe()
 		command.Start()
-		output, err := ioutil.ReadAll(outStream)
+		output, _ := ioutil.ReadAll(outStream)
 		errput, _ := ioutil.ReadAll(errStream)
 
 		command.Wait()
