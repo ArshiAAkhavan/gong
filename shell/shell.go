@@ -65,6 +65,8 @@ func (sh *Shell) getCommandByName(n string) *command.Command {
 	return nil
 }
 
+//todo	error handling for each command
+//todo commands error should not force the program to exit
 func (sh *Shell) run(args []string) {
 	c := sh.getCommandByName(args[0])
 	if c == nil {

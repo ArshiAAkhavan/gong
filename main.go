@@ -28,6 +28,7 @@ func generateCommands(shell *shell.Shell) {
 	shell.AddCommand(command.New("wait", func(args []string) {
 		time.Sleep(5 * time.Second)
 		fmt.Println("done waiting")
+		time.Sleep(5 * time.Second)
 		fmt.Println("we are good to go!")
 	}))
 }
