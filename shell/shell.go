@@ -28,7 +28,7 @@ func (sh *Shell) Start() {
 		commandline := strings.Trim(string(input), " \n")
 		args := strings.Fields(commandline)
 
-		run(args)
+		sh.run(args)
 	}
 
 }
@@ -46,17 +46,25 @@ func (sh *Shell) getCommandByName(n string) *command.Command {
 	return nil
 }
 
-func run(args []string) {
-	command := exec.Command(args[0], args[1:]...)
-	outStream, _ := command.StdoutPipe()
-	errStream, _ := command.StderrPipe()
+func (sh *Shell) run(args []string) {
+	c := sh.getCommandByName(args[0])
+	if c == nil {
+		command := exec.Command(args[0], args[1:]...)
+		outStream, _ := command.StdoutPipe()
+		errStream, _ := command.StderrPipe()
 
-	command.Start()
+		command.Start()
 
-	output, _ := ioutil.ReadAll(outStream)
-	errput, _ := ioutil.ReadAll(errStream)
+		output, _ := ioutil.ReadAll(outStream)
+		errput, _ := ioutil.ReadAll(errStream)
 
-	command.Wait()
-	log.Println(string(errput))
-	fmt.Println(string(output))
+		command.Wait()
+		log.Println(string(errput))
+		fmt.Println(string(output))
+		return
+	}
+
+	c.SetArgs(args)
+	c.Run()
+
 }
