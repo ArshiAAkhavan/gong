@@ -40,8 +40,7 @@ func (sh *Shell) Start() {
 			if err == io.EOF {
 				log.Fatalf("ali ali")
 			}
-			fmt.Printf("-----------------|%s|--------------------\n", input)
-			commandline := strings.Trim(string(input), " \n")
+		t	commandline := strings.Trim(string(input), " \n")
 			args := strings.Fields(commandline)
 
 			sh.run(args)
@@ -72,6 +71,7 @@ func (sh *Shell) getCommandByName(n string) *command.Command {
 
 //todo	error handling for each command
 //todo commands error should not force the program to exit
+//todo Ctrl+C doesnt work properly , check  github.com/matryer/runner
 func (sh *Shell) run(args []string) {
 	if len(args) == 0 {
 		return
