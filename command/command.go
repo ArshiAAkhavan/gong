@@ -1,13 +1,14 @@
 package command
 
 type Command struct {
-	raw string
+	name string
+	args []string
 }
 
 func New() *Command {
 	return &Command{}
 }
 
-func (c *Command) Raw() string {
-	return c.raw
+func (c *Command) Name() string {
+	return c.name
 }

@@ -28,26 +28,35 @@ func (sh *Shell) Start() {
 		commandline := strings.Trim(string(input), " \n")
 		args := strings.Fields(commandline)
 
-		command := exec.Command(args[0], args[1:]...)
-		outStream, _ := command.StdoutPipe()
-		errStream, _ := command.StderrPipe()
-
-		command.Start()
-
-		output, _ := ioutil.ReadAll(outStream)
-		errput, _ := ioutil.ReadAll(errStream)
-
-		command.Wait()
-		log.Println(string(errput))
-		fmt.Println(string(output))
+		run(args)
 	}
 
 }
-func (sh *Shell) getCommandByraw(r string) *command.Command {
+
+func (sh *Shell) AddCommand(c *command.Command) {
+	sh.commandList = append(sh.commandList, *c)
+}
+
+func (sh *Shell) getCommandByName(n string) *command.Command {
 	for _, command := range sh.commandList {
-		if command.Raw() == r {
+		if command.Name() == n {
 			return &command
 		}
 	}
 	return nil
+}
+
+func run(args []string) {
+	command := exec.Command(args[0], args[1:]...)
+	outStream, _ := command.StdoutPipe()
+	errStream, _ := command.StderrPipe()
+
+	command.Start()
+
+	output, _ := ioutil.ReadAll(outStream)
+	errput, _ := ioutil.ReadAll(errStream)
+
+	command.Wait()
+	log.Println(string(errput))
+	fmt.Println(string(output))
 }
