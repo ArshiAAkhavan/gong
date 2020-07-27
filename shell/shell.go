@@ -8,15 +8,24 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/signal"
 	"strings"
+	"syscall"
 )
 
 type Shell struct {
 	commandList []command.Command
+	os_sigs     chan os.Signal
+	done_sigs   chan int
 }
 
 func New() *Shell {
-	return &Shell{}
+	sh := Shell{}
+	sh.done_sigs = make(chan int, 1)
+	sh.os_sigs = make(chan os.Signal, 1)
+	signal.Notify(sh.os_sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	return &sh
 }
 
 func (sh *Shell) Start() {
@@ -24,11 +33,21 @@ func (sh *Shell) Start() {
 
 	for {
 		fmt.Print("gong> ")
-		input, _ := stdinReader.ReadString('\n')
-		commandline := strings.Trim(string(input), " \n")
-		args := strings.Fields(commandline)
 
-		sh.run(args)
+		go func() {
+			input, _ := stdinReader.ReadString('\n')
+			commandline := strings.Trim(string(input), " \n")
+			args := strings.Fields(commandline)
+
+			sh.run(args)
+			sh.done_sigs <- 0
+		}()
+		select {
+		case intrupt_signal := <-sh.os_sigs:
+			log.Println(intrupt_signal.String)
+		case exit_code := <-sh.done_sigs:
+			_ = exit_code
+		}
 	}
 
 }
