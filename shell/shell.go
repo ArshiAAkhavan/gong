@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"gong/command"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -35,7 +36,11 @@ func (sh *Shell) Start() {
 		fmt.Print("gong> ")
 
 		go func() {
-			input, _ := stdinReader.ReadString('\n')
+			input, err := stdinReader.ReadString('\n')
+			if err == io.EOF {
+				log.Fatalf("ali ali")
+			}
+			fmt.Printf("-----------------|%s|--------------------\n", input)
 			commandline := strings.Trim(string(input), " \n")
 			args := strings.Fields(commandline)
 
