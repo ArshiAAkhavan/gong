@@ -18,7 +18,7 @@ func main() {
 
 func generateCommands(shell *shell.Shell) {
 
-	shell.AddCommand(command.New("ls", func(args []string) {
+	shell.AddCommand(command.New("ali", func(args []string) {
 		reader := bufio.NewReader(os.Stdin)
 		input, _ := reader.ReadString('\n')
 		fmt.Println(strings.Fields(input)[1])
@@ -30,5 +30,13 @@ func generateCommands(shell *shell.Shell) {
 		fmt.Println("done waiting")
 		time.Sleep(5 * time.Second)
 		fmt.Println("we are good to go!")
+	}))
+
+	shell.AddCommand(command.New("aaaa", func(args []string) {
+		fmt.Println("called the A4")
+	}))
+
+	shell.AddCommand(command.New("aaa", func(args []string) {
+		fmt.Println("called the A3")
 	}))
 }
