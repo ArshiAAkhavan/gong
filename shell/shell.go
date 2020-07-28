@@ -74,6 +74,7 @@ func (sh *Shell) getCommandByName(n string) *command.Command {
 //todo Ctrl+C doesnt work properly , check  github.com/matryer/runner
 func (sh *Shell) run(args []string) {
 	if len(args) == 0 {
+		fmt.Println("bye!")
 		return
 	}
 	c := sh.getCommandByName(args[0])
