@@ -40,7 +40,7 @@ func (sh *Shell) Start() {
 			if err == io.EOF {
 				log.Fatalf("ali ali")
 			}
-		t	commandline := strings.Trim(string(input), " \n")
+			commandline := strings.Trim(string(input), " \n")
 			args := strings.Fields(commandline)
 
 			sh.run(args)
