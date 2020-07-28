@@ -39,4 +39,9 @@ func generateCommands(shell *shell.Shell) {
 	shell.AddCommand(command.New("aaa", func(args []string) {
 		fmt.Println("called the A3")
 	}))
+
+	shell.AddCommand(command.New("panic", func(args []string) {
+		panic("i paniced")
+	}))
+
 }

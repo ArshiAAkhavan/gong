@@ -77,6 +77,11 @@ func (sh *Shell) run(args []string) {
 		fmt.Println("bye!")
 		return
 	}
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("command entered an error state!")
+		}
+	}()
 	c := sh.getCommandByName(args[0])
 	if c == nil {
 		command := exec.Command(args[0], args[1:]...)
