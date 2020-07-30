@@ -15,9 +15,9 @@ import (
 )
 
 type Shell struct {
-	commandList []command.Command
-	os_sigs     chan os.Signal
-	done_sigs   chan int
+	execs     []command.Executable
+	os_sigs   chan os.Signal
+	done_sigs chan int
 }
 
 func New() *Shell {
@@ -56,21 +56,19 @@ func (sh *Shell) Start() {
 
 }
 
-func (sh *Shell) AddCommand(c *command.Command) {
-	sh.commandList = append(sh.commandList, *c)
+func (sh *Shell) AddExecutable(exec command.Executable) {
+	sh.execs = append(sh.execs, exec)
 }
 
-func (sh *Shell) getCommandByName(n string) *command.Command {
-	for _, command := range sh.commandList {
-		if command.Name() == n {
-			return &command
+func (sh *Shell) getExecutableByName(n string) *command.Executable {
+	for _, exec := range sh.execs {
+		if exec.Name() == n {
+			return &exec
 		}
 	}
 	return nil
 }
 
-//todo	error handling for each command
-//todo commands error should not force the program to exit
 //todo Ctrl+C doesnt work properly , check  github.com/matryer/runner
 func (sh *Shell) run(args []string) {
 	if len(args) == 0 {
@@ -82,8 +80,10 @@ func (sh *Shell) run(args []string) {
 			log.Println("command entered an error state!")
 		}
 	}()
-	c := sh.getCommandByName(args[0])
-	if c == nil {
+	x := *sh.getExecutableByName(args[0])
+
+	fmt.Println(x.Name())
+	if x == nil {
 		command := exec.Command(args[0], args[1:]...)
 		outStream, _ := command.StdoutPipe()
 		errStream, _ := command.StderrPipe()
@@ -98,8 +98,7 @@ func (sh *Shell) run(args []string) {
 		fmt.Println(string(output))
 		return
 	}
-
-	c.SetArgs(args)
-	c.Run()
+	x.SetArgs(args)
+	x.Execute()
 
 }
