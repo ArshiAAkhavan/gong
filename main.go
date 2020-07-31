@@ -1,35 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 )
-
-func main() {
-
-	names := make([]string, 0)
-
-	scanner := bufio.NewScanner(os.Stdin)
-
-	for {
-		fmt.Print("Enter name: ")
-
-		scanner.Scan()
-
-		text := scanner.Text()
-
-		if len(text) != 0 {
-
-			fmt.Println(text)
-			names = append(names, text)
-		} else {
-			break
-		}
-	}
-
-	fmt.Println(names)
-}
 
 // import (
 // 	"fmt"
@@ -71,7 +46,7 @@ func main() {
 // 	}
 // }
 
-/*func  main() {
+func main() {
 
 	// char, _, err := keyboard.GetSingleKey()
 	// if err != nil {
@@ -79,15 +54,14 @@ func main() {
 	// }
 	// fmt.Printf("You pressed: %q\r\n", char)
 	//--------------------------------------------------------------------------------------------------------------------
-	// // disable input buffering
-	// exec.Command("stty", "-F", "/dev/tty", "cbreak", "min", "1").Run()
-	// // // do not display entered characters on the screen
-	// // exec.Command("stty", "-F", "/dev/tty", "-echo").Rtun()
+	// disable input buffering
+	exec.Command("stty", "-F", "/dev/tty", "cbreak", "min", "1").Run()
+	// // do not display entered characters on the screen
+	exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
 
-	// var b []byte = make([]byte, 1)
-	// for {
-	// 	os.Stdin.Read(b)
-	// 	fmt.Println("I got the byte", b, "("+string(b)+")")
-	// }
+	var b []byte = make([]byte, 1)
+	for {
+		os.Stdin.Read(b)
+		fmt.Println("I got the byte", b, "("+string(b)+")")
+	}
 }
-*/
